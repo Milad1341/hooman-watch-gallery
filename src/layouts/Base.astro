@@ -9,6 +9,7 @@
  *     webfont has not loaded. If everything else fails, the number is there.
  */
 import '../styles/global.css';
+import DemoBanner from '../components/DemoBanner.astro';
 import { SHOP } from '../data/shop.js';
 
 interface Props {
@@ -80,14 +81,14 @@ const storeLd = {
          preloaded. -->
     <link
       rel="preload"
-      href="/fonts/plex-arabic-400.woff2"
+      href={`${import.meta.env.BASE_URL}fonts/plex-arabic-400.woff2`}
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/plex-arabic-600.woff2"
+      href={`${import.meta.env.BASE_URL}fonts/plex-arabic-600.woff2`}
       as="font"
       type="font/woff2"
       crossorigin
@@ -105,12 +106,13 @@ const storeLd = {
     <meta property="og:site_name" content={SHOP.nameFa} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
 
     <script type="application/ld+json" set:html={JSON.stringify(storeLd)} />
   </head>
 
   <body class="min-h-[100dvh]">
+    <DemoBanner />
     <slot />
   </body>
 </html>

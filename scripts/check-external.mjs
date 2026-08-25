@@ -12,6 +12,25 @@
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
 
+/**
+ * The site's own origin, read from astro.config.mjs. Canonical links, og:url
+ * and JSON-LD @id are absolute by necessity, so they name our own host - that
+ * is a self-reference, not a third-party request. Hard-coding the domain here
+ * broke the moment the preview moved to github.io, so derive it instead.
+ */
+const SELF_ORIGIN = (() => {
+  try {
+    const cfg = readFileSync('astro.config.mjs', 'utf8');
+    // Anchor to a real declaration, not a commented-out one. The config
+    // documents the future .ir domain in a comment above the live value, and
+    // an unanchored match grabbed the comment.
+    const m = cfg.match(/^\s*site:\s*'([^']+)'/m);
+    return m ? new URL(m[1]).origin : null;
+  } catch {
+    return null;
+  }
+})();
+
 const DIST = 'dist';
 const EXT = new Set(['.html', '.css', '.js', '.json', '.xml', '.svg']);
 
@@ -68,7 +87,7 @@ function check(file, content) {
     // href on <a> and content on <meta> are references, not fetches.
     const isReference = attr === 'href' || attr === 'content';
     if (isReference && isAllowedText(url)) continue;
-    if (isReference && /^https?:\/\/[^/]*hooman/i.test(url)) continue;
+    if (isReference && SELF_ORIGIN && url.startsWith(SELF_ORIGIN)) continue;
     if (!isReference || !isAllowedText(url)) {
       const key = `${file}|${url}`;
       if (seen.has(key)) continue;

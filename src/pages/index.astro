@@ -58,7 +58,7 @@ const title = `${SHOP.nameFa} | نمایندگی رسمی سیکو، سیتیز�
               class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-base text-on-accent"
             />
             <a
-              href="/watches/"
+              href={`${import.meta.env.BASE_URL}watches/`}
               class="press inline-flex min-h-[54px] items-center border border-control px-7 text-ink hover:bg-panel"
             >
               دیدن مجموعه
@@ -131,7 +131,7 @@ const title = `${SHOP.nameFa} | نمایندگی رسمی سیکو، سیتیز�
           brands.map((b) => (
             <li>
               <a
-                href={`/brand/${b.key}/`}
+                href={`${import.meta.env.BASE_URL}brand/${b.key}/`}
                 class="lift block h-full border border-hairline px-5 py-6 hover:border-control hover:bg-panel"
               >
                 <span class="block text-lg">{b.fa}</span>

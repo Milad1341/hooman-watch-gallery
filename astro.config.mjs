@@ -5,9 +5,13 @@ import tailwindcss from '@tailwindcss/vite';
 // Hooman Watch Gallery
 // Static output only. No adapter, no islands, no CI. See CLAUDE.md.
 export default defineConfig({
-  // `site` is required for absolute URLs in sitemap.xml and og:url.
-  // TODO: replace once the .ir domain is registered (Phase 08).
-  site: 'https://hoomanwatch.ir',
+  // PREVIEW deployment on GitHub Pages. `base` is required because Pages
+  // serves the repo at a subpath, and every asset href has to carry it.
+  //
+  // For the real launch on an Iranian host (Phase 08) this becomes
+  // site: 'https://hoomanwatch.ir' and `base` is removed entirely.
+  site: 'https://milad1341.github.io',
+  base: '/hooman-watch-gallery',
 
   output: 'static',
 

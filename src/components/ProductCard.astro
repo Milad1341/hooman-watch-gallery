@@ -31,7 +31,7 @@ const img = productImage(p.slug);
 ---
 
 <article data-card class="lift group bg-plate">
-  <a href={`/watch/${p.slug}/`} class="block p-4">
+  <a href={`${import.meta.env.BASE_URL}watch/${p.slug}/`} class="block p-4">
     <!-- 1:1 so an uneven set of supplier photos still grids perfectly.
          Ragged card heights are an instant credibility loss. -->
     <div class="relative aspect-square overflow-hidden bg-[#eeeeeb]">

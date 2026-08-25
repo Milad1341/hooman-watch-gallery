@@ -11,18 +11,19 @@
 import Mark from './Mark.astro';
 import Phone from './Phone.astro';
 import { SHOP, primaryPhone } from '../data/shop.js';
+import { url } from '../lib/url.js';
 
 const nav = [
-  { href: '/watches/', label: 'مجموعه' },
-  { href: '/repairs/', label: 'تعمیرات' },
-  { href: '/about/', label: 'درباره ما' },
-  { href: '/visit/', label: 'آدرس' },
+  { href: url('/watches/'), label: 'مجموعه' },
+  { href: url('/repairs/'), label: 'تعمیرات' },
+  { href: url('/about/'), label: 'درباره ما' },
+  { href: url('/visit/'), label: 'آدرس' },
 ];
 ---
 
 <header class="sticky top-0 z-40 border-b border-hairline bg-shell/95 backdrop-blur">
   <div class="mx-auto flex h-[68px] max-w-6xl items-center gap-6 px-6">
-    <a href="/" class="flex shrink-0 items-center gap-3" aria-label={SHOP.nameFa}>
+    <a href={url("/")} class="flex shrink-0 items-center gap-3" aria-label={SHOP.nameFa}>
       <Mark class="w-8 text-ink" />
       <span class="hidden text-base sm:inline">{SHOP.nameFa}</span>
     </a>
