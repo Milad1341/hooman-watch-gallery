@@ -11,7 +11,7 @@ export default defineConfig({
   // For the real launch on an Iranian host (Phase 08) this becomes
   // site: 'https://hoomanwatch.ir' and `base` is removed entirely.
   site: 'https://milad1341.github.io',
-  base: '/hooman-watch-gallery',
+  base: '/hooman-watch-gallery/',
 
   output: 'static',
 
