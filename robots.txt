@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://milad1341.github.io/sitemap.xml
