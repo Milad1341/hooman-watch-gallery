@@ -1,0 +1,116 @@
+---
+/**
+ * Base layout. Every page goes through here.
+ *
+ * Non-negotiables encoded below:
+ *   - lang="fa" dir="rtl" on <html>
+ *   - zero third-party requests (no Google Fonts, no analytics, no maps)
+ *   - the phone number renders in the first paint, in fallback type if the
+ *     webfont has not loaded. If everything else fails, the number is there.
+ */
+import '../styles/global.css';
+import { SHOP } from '../data/shop.js';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = SHOP.descriptionFa } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const origin = new URL('/', Astro.site).href;
+
+/**
+ * JewelryStore JSON-LD, site-wide with a stable @id.
+ *
+ * This is doing unusually heavy lifting. Google Business Profile does not
+ * support Iran at all (OFAC), so there is no local pack, no claimable listing
+ * and no Google-hosted hours for this shop, ever. This node is the ONLY
+ * machine-readable record of the business anywhere.
+ *
+ * Hours are TWO entries because the shop closes 14:00-17:00. A single
+ * 11:00-22:00 range would send customers to a closed shop.
+ */
+const storeLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JewelryStore',
+  '@id': origin + '#store',
+  name: SHOP.nameFa,
+  alternateName: SHOP.nameLatin,
+  description: SHOP.descriptionFa,
+  url: origin,
+  telephone: '+98' + SHOP.phones[0].national.replace(/^0/, ''),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SHOP.address.fa,
+    addressLocality: SHOP.address.city,
+    addressRegion: SHOP.address.region,
+    addressCountry: SHOP.address.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SHOP.geo.lat, longitude: SHOP.geo.lng },
+  foundingDate: String(SHOP.foundedYear),
+  sameAs: [`https://www.instagram.com/${SHOP.instagram}/`],
+  knowsAbout: [
+    'Seiko', 'Citizen', 'Casio', 'G-Shock', 'Timex', 'Q&Q', 'Obaku',
+    'Daniel Klein', 'Guess', 'Esprit', 'Tommy Hilfiger', 'Caterpillar',
+    'Extri', 'Julius', 'watch repair', 'تعمیر ساعت',
+  ],
+  openingHoursSpecification: SHOP.hours.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: [
+      'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+    ],
+    opens: h.opens,
+    closes: h.closes,
+  })),
+};
+---
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Preload the two faces used above the fold. The mono face is only
+         needed for reference numbers further down the page, so it is not
+         preloaded. -->
+    <link
+      rel="preload"
+      href="/fonts/plex-arabic-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/plex-arabic-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta name="theme-color" content="#0b0c0d" />
+
+    <!-- Open Graph. Telegram and WhatsApp are the surfaces that actually
+         render a preview in this market; Instagram does not. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content={SHOP.nameFa} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(storeLd)} />
+  </head>
+
+  <body class="min-h-[100dvh]">
+    <slot />
+  </body>
+</html>

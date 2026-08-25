@@ -1,0 +1,42 @@
+---
+/**
+ * A phone number: Persian digits in the label, ASCII E.164 in the href.
+ *
+ * Two rules encoded here, both of which fail silently if broken:
+ *   1. RFC 3966 requires ASCII digits in the href. Persian digits will not dial.
+ *   2. The visible label uses national format (۰۲۱ ...), never +98, which reads
+ *      as a foreign export site to a domestic customer.
+ */
+import { toPersianDigits } from '../lib/normalize.js';
+
+interface Props {
+  /** National format with leading zero, digits only, e.g. "02144697309" */
+  national: string;
+  /** Optional grouping for the visible label, e.g. "021-44697309" */
+  display?: string;
+  /** Optional Persian text shown before the number, e.g. "تماس با گالری" */
+  label?: string;
+  class?: string;
+}
+
+const { national, display, label, class: className = '' } = Astro.props;
+
+// Strip the leading 0 and prepend 98. One rule, no prefix table to maintain.
+const e164 = '+98' + national.replace(/\D/g, '').replace(/^0/, '');
+const shown = toPersianDigits(display ?? national);
+
+if (!/^\+98\d{9,10}$/.test(e164)) {
+  throw new Error(`Phone: "${national}" did not produce a valid E.164 number (got "${e164}")`);
+}
+---
+
+{
+  label ? (
+    <a href={`tel:${e164}`} class={className}>
+      <span>{label}</span>
+      <span class="ltr-num">{shown}</span>
+    </a>
+  ) : (
+    <a href={`tel:${e164}`} class:list={['ltr-num', className]}>{shown}</a>
+  )
+}

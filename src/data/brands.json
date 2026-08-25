@@ -1,0 +1,132 @@
+{
+  "_note": "Persian spellings and variants come from docs/research/BRANDS.md, where each was independently verified against live Iranian marketplace data. Every string uses Persian yeh (U+06CC) and Persian keheh (U+06A9). The variants array feeds the search index, NOT the display. Read the traps section of BRANDS.md before editing.",
+
+  "brands": [
+    {
+      "key": "seiko",
+      "latin": "SEIKO",
+      "fa": "سیکو",
+      "variants": ["سیکو ۵", "سیکو 5", "سیکو فایو", "سیکو سلطنتی", "سیکو امپراطوری", "سیکو پرمیر", "سیکو سلکشن"],
+      "certified": true,
+      "priority": 1,
+      "descriptionFa": "ساعت‌های سیکو ژاپن، از مدل‌های روزمره تا اتوماتیک. گالری هومن نمایندگی رسمی سیکو است."
+    },
+    {
+      "key": "citizen",
+      "latin": "CITIZEN",
+      "fa": "سیتیزن",
+      "variants": ["سیتی زن", "سیتی‌زن", "سیتزین", "سیتیزن اکو درایو", "سیتیزن اکودرایو"],
+      "certified": true,
+      "priority": 1,
+      "descriptionFa": "سیتیزن ژاپن، شناخته‌شده برای فناوری اکو درایو که با نور کار می‌کند و باتری نمی‌خواهد."
+    },
+    {
+      "key": "casio",
+      "latin": "CASIO",
+      "fa": "کاسیو",
+      "variants": ["ساعت کاسیو", "کاسیو کلاسیک", "ادیفایس", "اولدمانی", "اولد مانی", "شین"],
+      "certified": true,
+      "priority": 1,
+      "descriptionFa": "کاسیو ژاپن، از مدل‌های کلاسیک استیل تا سری ادیفایس. گالری هومن نمایندگی رسمی کاسیو است."
+    },
+    {
+      "key": "g-shock",
+      "latin": "G-SHOCK",
+      "fa": "جی شاک",
+      "variants": ["جیشاک", "جی‌شاک", "جی شوک", "جی-شاک", "کاسیو جی شاک", "بیبی جی"],
+      "certified": true,
+      "priority": 2,
+      "descriptionFa": "جی شاک، سری مقاوم کاسیو. ضربه‌خور، ضدآب و ساخته‌شده برای استفاده‌ی سخت."
+    },
+    {
+      "key": "timex",
+      "latin": "TIMEX",
+      "fa": "تایمکس",
+      "variants": ["تیمکس"],
+      "certified": false,
+      "priority": 1,
+      "descriptionFa": "تایمکس آمریکا، با بیش از صد سال سابقه. ساده، بادوام و خوش‌قیمت."
+    },
+    {
+      "key": "qq",
+      "latin": "Q&Q",
+      "fa": "کیو اند کیو",
+      "variants": ["کیو کیو", "لاین سوپریور"],
+      "certified": false,
+      "priority": 2,
+      "descriptionFa": "کیو اند کیو، زیرمجموعه‌ی سیتیزن. ساعت ژاپنی اصل با قیمت مناسب؛ نقطه‌ی شروع خوبی برای اولین ساعت."
+    },
+    {
+      "key": "obaku",
+      "latin": "OBAKU",
+      "fa": "اباکو",
+      "variants": ["آباکو", "اوباکو", "اباکو دنمارک", "اوباکو دانمارک"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "اباکو دانمارک، با طراحی مینیمال اسکاندیناوی. نازک، ساده و مناسب استفاده‌ی روزمره."
+    },
+    {
+      "key": "daniel-klein",
+      "latin": "DANIEL KLEIN",
+      "fa": "دنیل کلین",
+      "variants": ["دنیلکلین"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "دنیل کلین، با تنوع بالای مدل و طراحی کلاسیک. انتخابی متداول برای هدیه."
+    },
+    {
+      "key": "guess",
+      "latin": "GUESS",
+      "fa": "گس",
+      "variants": ["گس واچ", "گس کالکشن", "جی سی"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "گس آمریکا، ساعت مد روز با طراحی جسورانه و جزئیات درشت."
+    },
+    {
+      "key": "esprit",
+      "latin": "ESPRIT",
+      "fa": "اسپریت",
+      "variants": ["اسپیریت", "اسپریت کالکشن"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "اسپریت آلمان، طراحی سبک و امروزی با قیمت منطقی."
+    },
+    {
+      "key": "tommy-hilfiger",
+      "latin": "TOMMY HILFIGER",
+      "fa": "تامی هیلفیگر",
+      "variants": ["تامی هلفیگر", "تامی هایلفیگر", "تامی‌هیلفیگر", "تومی هیلفیگر", "هیلفیگر"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "تامی هیلفیگر، سبک کلاسیک آمریکایی با رنگ‌بندی شناخته‌شده‌ی برند."
+    },
+    {
+      "key": "cat",
+      "latin": "CAT",
+      "fa": "کاترپیلار",
+      "variants": ["کاترپیلار", "کترپیلار", "کاتر پیلار", "Caterpillar"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "کاترپیلار، ساعت‌های مقاوم با ظاهر صنعتی. ساخته‌شده تحت لیسانس برای کاترپیلار."
+    },
+    {
+      "key": "extri",
+      "latin": "EXTRI",
+      "fa": "اکستری",
+      "variants": ["ایکستری", "ایکس تری", "ایکس‌تری", "اکس تری"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "اکستری، طراحی اسپرت و مدرن با قیمت مناسب."
+    },
+    {
+      "key": "julius",
+      "latin": "JULIUS",
+      "fa": "جولیوس",
+      "variants": ["جولیوس کره", "ژولیوس"],
+      "certified": false,
+      "priority": 3,
+      "descriptionFa": "جولیوس کره‌ی جنوبی، باریک و مینیمال. محبوب برای ساعت‌های زنانه و ست."
+    }
+  ]
+}

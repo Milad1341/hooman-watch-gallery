@@ -1,0 +1,79 @@
+---
+/**
+ * Repairs.
+ *
+ * `تعمیر ساعت اکباتان` is high-intent and low-competition, and repairs bring
+ * strangers through the door who then become customers. This page may convert
+ * better than the catalogue.
+ */
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import CallBar from '../components/CallBar.astro';
+import Phone from '../components/Phone.astro';
+import { SHOP, primaryPhone } from '../data/shop.js';
+import { toPersianDigits } from '../lib/normalize.js';
+
+const services = [
+  ['تعویض باتری', 'باتری ساعت را همان‌جا عوض می‌کنیم، معمولا در چند دقیقه.'],
+  ['تعمیر موتور', 'ساعت‌های کوارتز و اتوماتیک را بررسی و تعمیر می‌کنیم.'],
+  ['تعویض و کوتاه کردن بند', 'بند فلزی را اندازه‌ی دست شما می‌کنیم و بند چرم را تعویض می‌کنیم.'],
+  ['تعویض شیشه', 'شیشه‌ی خط‌افتاده یا شکسته را عوض می‌کنیم.'],
+  ['تست ضدآب بودن', 'بعد از باز شدن قاب، آب‌بندی ساعت دوباره بررسی می‌شود.'],
+];
+---
+
+<Base
+  title={`تعمیر ساعت در اکباتان | ${SHOP.nameFa}`}
+  description="تعمیر ساعت، تعویض باتری، تعویض بند و شیشه در شهرک اکباتان تهران. برای ساعت‌هایی که از ما نخریده‌اید هم انجام می‌دهیم."
+>
+  <SiteHeader />
+
+  <main class="mx-auto max-w-6xl px-6 py-14">
+    <h1 class="text-3xl">تعمیر ساعت</h1>
+    <p class="mt-4 max-w-[46rem] text-lg text-muted">
+      ساعت را همین‌جا تعمیر می‌کنیم. برای ساعت‌هایی که از ما نخریده‌اید هم انجام می‌دهیم.
+    </p>
+
+    <ul class="reveal-stagger mt-12 grid gap-px bg-hairline sm:grid-cols-2">
+      {
+        services.map(([t, d]) => (
+          <li class="bg-shell p-7">
+            <span class="inline-block h-4 w-1 bg-accent" />
+            <h2 class="mt-3 text-lg">{t}</h2>
+            <p class="mt-2 text-muted">{d}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <section class="reveal mt-16 border-t border-hairline pt-10">
+      <h2 class="text-2xl">قبل از آمدن زنگ بزنید</h2>
+      <p class="mt-4 max-w-[46rem] text-muted">
+        بگویید ساعت چه برندی است و مشکلش چیست تا بگوییم چقدر طول می‌کشد و آیا قطعه‌اش موجود
+        است.
+      </p>
+      <p class="mt-8">
+        <Phone
+          national={primaryPhone.national}
+          display={primaryPhone.display}
+          label="تماس با گالری"
+          class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-on-accent"
+        />
+      </p>
+      <p class="mt-6 text-muted">
+        هر روز هفته،
+        {SHOP.hours.map((h, i) => (
+          <>
+            {i > 0 && ' و '}
+            <span class="ltr-num">{toPersianDigits(h.opens)}</span> تا{' '}
+            <span class="ltr-num">{toPersianDigits(h.closes)}</span>
+          </>
+        ))}
+      </p>
+    </section>
+  </main>
+
+  <SiteFooter />
+  <CallBar />
+</Base>

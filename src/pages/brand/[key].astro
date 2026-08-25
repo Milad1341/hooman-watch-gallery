@@ -1,0 +1,92 @@
+---
+/**
+ * Brand page.
+ *
+ * Every brand page carries the "over 1,000 models in the shop" line. That
+ * reframes a curated catalogue from an omission into an invitation, and it is
+ * true. It is the strongest sales copy on the site.
+ */
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import CallBar from '../../components/CallBar.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import BrandName from '../../components/BrandName.astro';
+import Phone from '../../components/Phone.astro';
+import { brands, byBrand } from '../../lib/catalogue.js';
+import { SHOP, primaryPhone } from '../../data/shop.js';
+
+export function getStaticPaths() {
+  return brands.map((b) => ({ params: { key: b.key }, props: { b } }));
+}
+
+const { b } = Astro.props;
+const list = byBrand(b.key);
+
+const title = b.certified
+  ? `ساعت ${b.fa} اصل | نمایندگی رسمی - ${SHOP.nameFa}`
+  : `ساعت ${b.fa} اصل | ${SHOP.nameFa}`;
+---
+
+<Base title={title} description={b.descriptionFa}>
+  <SiteHeader />
+
+  <main class="mx-auto max-w-6xl px-6 py-14">
+    <nav aria-label="مسیر" class="text-sm text-muted">
+      <a href="/" class="inline-block px-1 py-1 hover:text-ink">خانه</a>
+      <span class="mx-1">/</span>
+      <a href="/watches/" class="inline-block px-1 py-1 hover:text-ink">مجموعه</a>
+    </nav>
+
+    <header class="mt-8">
+      <h1 class="text-3xl">ساعت {b.fa}</h1>
+      <p class="mt-2"><span class="label text-[11px] text-muted"><BrandName name={b.latin} /></span></p>
+
+      {
+        b.certified && (
+          <p class="mt-5 inline-flex items-center gap-2 border border-accent px-3 py-2 text-sm text-accent">
+            <span class="inline-block h-3 w-1 bg-accent" />
+            نمایندگی رسمی {b.fa}
+          </p>
+        )
+      }
+
+      <p class="mt-6 max-w-[46rem] text-muted">{b.descriptionFa}</p>
+    </header>
+
+    {
+      list.length > 0 ? (
+        <ul class="reveal-stagger mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {list.map((p) => (
+            <li>
+              <ProductCard product={p} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="mt-12 border border-hairline p-8 text-muted">
+          مدل‌های این برند هنوز روی سایت نیست. برای دیدن موجودی تماس بگیرید.
+        </p>
+      )
+    }
+
+    <!-- The line that has to appear on every brand page. -->
+    <section class="mt-16 border-t border-hairline pt-10">
+      <p class="max-w-[46rem] text-lg">
+        بیش از ۱۰۰۰ مدل در مغازه موجود است. برای دیدن همه‌ی مدل‌ها تماس بگیرید یا حضوری تشریف
+        بیاورید.
+      </p>
+      <p class="mt-6">
+        <Phone
+          national={primaryPhone.national}
+          display={primaryPhone.display}
+          label="تماس با گالری"
+          class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-on-accent"
+        />
+      </p>
+    </section>
+  </main>
+
+  <SiteFooter />
+  <CallBar />
+</Base>

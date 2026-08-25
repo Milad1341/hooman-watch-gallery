@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Phone from '../components/Phone.astro';
+import { primaryPhone } from '../data/shop.js';
+---
+
+<Base title="صفحه پیدا نشد" description="این صفحه وجود ندارد.">
+  <SiteHeader />
+  <main class="mx-auto max-w-3xl px-6 py-24 text-center">
+    <h1 class="text-3xl">این صفحه پیدا نشد</h1>
+    <p class="mt-4 text-muted">
+      شاید مدلی که دنبالش بودید عوض شده باشد. مجموعه را ببینید یا زنگ بزنید تا کمکتان کنیم.
+    </p>
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <Phone
+        national={primaryPhone.national}
+        display={primaryPhone.display}
+        label="تماس با گالری"
+        class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-on-accent"
+      />
+      <a href="/watches/" class="press inline-flex min-h-[54px] items-center border border-control px-7 text-ink hover:bg-panel">
+        دیدن مجموعه
+      </a>
+    </div>
+  </main>
+  <SiteFooter />
+</Base>

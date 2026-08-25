@@ -1,0 +1,198 @@
+---
+/**
+ * Homepage.
+ *
+ * Section order follows the verified pattern for call-conversion retail:
+ * header with the number as text, hero, how-buying-works, the dealer claim,
+ * brands, trust, visit, footer. Every section either builds desire or removes
+ * a reason not to phone. Nothing else earns a slot.
+ */
+import Base from '../layouts/Base.astro';
+import HeroDial from '../components/HeroDial.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import CallBar from '../components/CallBar.astro';
+import TickRule from '../components/TickRule.astro';
+import BrandName from '../components/BrandName.astro';
+import Phone from '../components/Phone.astro';
+import { toPersianDigits } from '../lib/normalize.js';
+import { SHOP, primaryPhone } from '../data/shop.js';
+import brandData from '../data/brands.json';
+
+const brands = brandData.brands;
+const certified = brands.filter((b) => b.certified);
+const title = `${SHOP.nameFa} | نمایندگی رسمی سیکو، سیتیزن و کاسیو در اکباتان`;
+---
+
+<Base title={title}>
+  <SiteHeader />
+
+  <main>
+    <!-- HERO ------------------------------------------------------------ -->
+    <section class="relative overflow-hidden">
+      <div
+        class="dial-parallax pointer-events-none absolute -top-[8%] -start-[30%] w-[78%] max-w-[620px] opacity-90 sm:-top-[6%] sm:-start-[6%] sm:w-[44%]"
+      >
+        <div class="dial-scroll">
+          <HeroDial />
+        </div>
+      </div>
+
+      <div class="relative mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
+        <div class="hero-copy ms-auto max-w-[34rem]">
+          <h1 class="text-4xl leading-[1.35] sm:text-5xl">
+            ۱۶ سال در اکباتان.<br />
+            نمایندگی رسمی سیکو، سیتیزن و کاسیو.
+          </h1>
+
+          <p class="mt-6 max-w-[30rem] text-lg text-muted">
+            بیش از ۱۰۰۰ مدل ساعت در مغازه موجود است. برای قیمت و موجودی تماس بگیرید یا حضوری
+            تشریف بیاورید.
+          </p>
+
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <Phone
+              national={primaryPhone.national}
+              display={primaryPhone.display}
+              label="تماس با گالری"
+              class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-base text-on-accent"
+            />
+            <a
+              href="/watches/"
+              class="press inline-flex min-h-[54px] items-center border border-control px-7 text-ink hover:bg-panel"
+            >
+              دیدن مجموعه
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW BUYING WORKS ------------------------------------------------ -->
+    <section class="reveal border-t border-hairline bg-panel">
+      <div class="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1fr_auto]">
+        <div class="max-w-[38rem]">
+          <h2 class="text-2xl">خرید حضوری است</h2>
+          <p class="mt-4 text-muted">
+            قیمت‌ها روی سایت نیست، چون بازار روزانه تغییر می‌کند. مدلی که می‌پسندید را
+            ببینید، بعد زنگ بزنید تا قیمت و موجودی امروز را بگوییم.
+          </p>
+        </div>
+        <div class="md:text-end">
+          <p><span class="label text-[11px] text-muted">ساعت کاری</span></p>
+          <p class="mt-2 text-lg">هر روز هفته</p>
+          {
+            SHOP.hours.map((h) => (
+              <p class="text-muted">
+                <span class="ltr-num">{toPersianDigits(h.opens)}</span> تا{' '}
+                <span class="ltr-num">{toPersianDigits(h.closes)}</span>
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- THE DEALER CLAIM ------------------------------------------------ -->
+    <section class="reveal mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-2xl">نمایندگی رسمی</h2>
+      <p class="mt-4 max-w-[42rem] text-muted">
+        ما فروشنده‌ی مجاز این برندها هستیم. ساعتی که می‌خرید از مسیر رسمی وارد شده و گارانتی
+        آن از طرف نمایندگی همان برند در ایران ارائه می‌شود.
+      </p>
+
+      <ul class="reveal-stagger mt-10 grid grid-cols-2 gap-px bg-hairline sm:grid-cols-4">
+        {
+          certified.map((b) => (
+            <li class="bg-shell px-5 py-8 text-center">
+              <p class="text-lg">{b.fa}</p>
+              <p class="mt-1">
+                <span class="label text-[10px] text-muted">
+                  <BrandName name={b.latin} />
+                </span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <TickRule />
+
+    <!-- ALL BRANDS ------------------------------------------------------ -->
+    <section class="reveal mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-2xl">برندها</h2>
+      <p class="mt-4 max-w-[42rem] text-muted">
+        چهارده برند در گالری موجود است، از ساعت‌های ژاپنی تا برندهای مد روز.
+      </p>
+
+      <ul class="reveal-stagger mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {
+          brands.map((b) => (
+            <li>
+              <a
+                href={`/brand/${b.key}/`}
+                class="lift block h-full border border-hairline px-5 py-6 hover:border-control hover:bg-panel"
+              >
+                <span class="block text-lg">{b.fa}</span>
+                <span class="label mt-1 text-[10px] text-muted">
+                  <BrandName name={b.latin} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- TRUST ----------------------------------------------------------- -->
+    <section class="border-t border-hairline bg-panel">
+      <div class="reveal mx-auto max-w-6xl px-6 py-20">
+        <h2 class="text-2xl">چرا از ما بخرید</h2>
+        <div class="reveal-stagger mt-10 grid gap-10 md:grid-cols-3">
+          <div>
+            <span class="inline-block h-5 w-1 bg-accent"></span>
+            <h3 class="mt-4 text-lg">از سال ۱۳۸۹ در یک آدرس</h3>
+            <p class="mt-2 text-muted">
+              شانزده سال است در همین بازارچه هستیم. اگر مشکلی پیش بیاید، می‌دانید کجا
+              پیدایمان کنید.
+            </p>
+          </div>
+          <div>
+            <span class="inline-block h-5 w-1 bg-accent"></span>
+            <h3 class="mt-4 text-lg">گارانتی از طرف برند</h3>
+            <p class="mt-2 text-muted">
+              گارانتی هر ساعت از سوی نمایندگی همان برند در ایران ارائه می‌شود، نه از طرف
+              مغازه.
+            </p>
+          </div>
+          <div>
+            <span class="inline-block h-5 w-1 bg-accent"></span>
+            <h3 class="mt-4 text-lg">تعمیر و تعویض باتری</h3>
+            <p class="mt-2 text-muted">
+              ساعت را همین‌جا تعمیر می‌کنیم. برای ساعت‌هایی که از ما نخریده‌اید هم انجام
+              می‌دهیم.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISIT ----------------------------------------------------------- -->
+    <section class="reveal mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-2xl">آدرس گالری</h2>
+      <p class="mt-4 max-w-[38rem] text-lg">{SHOP.address.fa}</p>
+      <p class="mt-3 text-muted">پارکینگ در نزدیکی مغازه موجود است.</p>
+      <p class="mt-8">
+        <Phone
+          national={primaryPhone.national}
+          display={primaryPhone.display}
+          class="text-lg text-accent"
+        />
+      </p>
+    </section>
+  </main>
+
+  <SiteFooter />
+  <CallBar />
+</Base>

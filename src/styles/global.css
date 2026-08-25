@@ -1,0 +1,348 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   FONTS - self-hosted, subset, zero third-party requests.
+
+   Google Cloud blocks Iran at platform level, so fonts.googleapis.com hangs
+   for the actual audience. These are subset with scripts/subset-fonts.py and
+   served from our own origin. See CLAUDE.md section 3.2.
+
+   Only three faces. IBM Plex Sans Arabic was verified to carry all six
+   Persian-specific letters and all ten Persian digits, AND full ASCII, so a
+   separate Latin family would be dead weight. Plex Sans and Plex Mono carry
+   NO Persian at all, not even Persian punctuation - which is why the Arabic
+   face is the base family and Mono is reserved for ASCII references.
+   ========================================================================= */
+
+@font-face {
+  font-family: 'Plex Arabic';
+  src: url('/fonts/plex-arabic-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plex Arabic';
+  src: url('/fonts/plex-arabic-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plex Mono';
+  src: url('/fonts/plex-mono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================================
+   TOKENS - dark room, lit case.
+
+   The shell is a dark gallery interior; product images sit on a light plate,
+   like an illuminated vitrine. Every contrast ratio below was computed, not
+   estimated. See docs/phases/PHASE-02-brand-system.md.
+   ========================================================================= */
+
+@theme {
+  /* shell - the dark gallery */
+  --color-shell: #0b0c0d;
+  --color-panel: #15171a;
+  --color-ink: #e9eaec;      /* 16.26:1 on shell  AAA */
+  --color-muted: #8b9095;    /*  6.08:1 on shell  AA  */
+
+  /* plate - the lit vitrine */
+  --color-plate: #f7f7f5;       /* 18.25:1 vs shell      */
+  --color-plate-ink: #12161c;   /* 16.92:1 on plate  AAA */
+  --color-plate-muted: #5c636d; /*  5.66:1 on plate  AA  */
+
+  /* accent - lume. The only glow a watch legitimately owns.
+     Used ONLY on the call CTA and active states. Never as a fill,
+     never as a glow, never as a gradient. At 1-2% coverage it is a
+     signature; beyond that it becomes a gaming peripheral. */
+  --color-accent: #a8d94a;   /* 11.83:1 on shell  AAA */
+  --color-on-accent: #0b0c0d;
+
+  /* lines - NOT interchangeable.
+     hairline is decorative only (1.31:1, exempt from contrast rules).
+     control is required wherever a border is the only thing marking an
+     interactive boundary. WCAG 1.4.11 needs 3:1 and hairline fails it. */
+  --color-hairline: #24272b; /* 1.31:1 - decorative only */
+  --color-control: #6b7178;  /* 3.97:1 - control boundaries */
+
+  --font-fa: 'Plex Arabic', system-ui, sans-serif;
+  --font-mono: 'Plex Mono', ui-monospace, monospace;
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+
+html {
+  /* macOS renders our light-on-dark type too heavy without this */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-shell);
+}
+
+body {
+  background-color: var(--color-shell);
+  color: var(--color-ink);
+  font-family: var(--font-fa);
+  font-weight: 400;
+
+  /* Persian needs materially more leading than Latin. */
+  line-height: 1.8;
+
+  /* NEVER apply letter-spacing to Persian - it breaks Arabic-script joining
+     and turns connected words into disconnected letters. Tracking is applied
+     only to explicitly-Latin uppercase labels, via .label below. */
+  letter-spacing: 0;
+}
+
+/* Headings are tighter than body, but still never tracked in Persian. */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* ============================================================================
+   BIDI - the trap that silently mangles every phone number.
+
+   A Latin-digit number inside Persian RTL text is visually reordered by the
+   Unicode bidi algorithm: 021 4390 0000 renders as 0000 4390 021. Any run of
+   Latin digits or a model reference must be isolated.
+   ========================================================================= */
+
+.ltr-num,
+.reference {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* IMPORTANT: .ltr-num, .reference and .label set `direction: ltr`, which also
+   flips BLOCK alignment. Applied to a <p> inside an RTL parent they align to
+   the left edge, producing a zigzag against neighbouring Persian lines.
+
+   Always apply them to an inline <span> wrapped in a normal block:
+
+     <p><span class="reference">SRPB41J1</span></p>   correct
+     <p class="reference">SRPB41J1</p>                misaligns
+
+   `display: inline-block` below makes a misuse shrink-to-fit and sit at the
+   RTL start rather than stretching to the full width, so the failure is much
+   less ugly - but the markup rule above is the real fix. */
+.ltr-num,
+.reference,
+.label {
+  display: inline-block;
+}
+
+.reference {
+  font-family: var(--font-mono);
+}
+
+/* Latin uppercase labels - the one place tracking is allowed, because it is
+   the one place the text is guaranteed not to be Arabic script. */
+.label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ============================================================================
+   MOTION - budget is two durations sitewide.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   FOCUS - visible, and it must survive RTL.
+   ========================================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Images get a neutral inset outline so edges do not blur into the surface.
+   Never tint this with the brand palette. */
+img {
+  outline: 1px solid rgb(255 255 255 / 0.08);
+  outline-offset: -1px;
+}
+
+/* ============================================================================
+   MOTION LAYER - native CSS scroll-driven animations.
+
+   Why not GSAP or motion/react: both mean a third-party request or a JS
+   bundle, and this audience is on a throttled connection where every request
+   costs 70-97ms of international latency. `animation-timeline` is native,
+   costs zero bytes of JavaScript, and runs off the main thread.
+
+   PROGRESSIVE ENHANCEMENT IS LOAD-BEARING HERE. Support is roughly Chrome
+   115+ and Safari 26+, and this audience skews to older devices. So the
+   DEFAULT state of every element is fully visible; the animation is added
+   only inside @supports. A browser without support sees a complete, correct
+   page - it just does not move.
+
+   Only transform, opacity and filter are animated. Never layout properties.
+   ========================================================================= */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Sections rise as they enter. 24px is enough to read as movement and
+       small enough that it never looks like the page is assembling itself. */
+    /* LONGHAND ONLY. The `animation` shorthand resets animation-timeline to
+       `auto`, and Lightning CSS will happily collapse adjacent longhands into
+       it - which silently deletes the scroll timeline. Verified: the minifier
+       produced `animation: linear both reveal-in view()` and the animation
+       stopped existing. Do not "tidy" these into a shorthand. */
+    .reveal {
+      animation-name: reveal-in;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 28%;
+    }
+
+    @keyframes reveal-in {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Grid children arrive in sequence rather than as a block. The delay is
+       driven by --i so it needs no JavaScript. */
+    .reveal-stagger > * {
+      animation-name: reveal-in;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+
+    /* THE IDEA: the hero dial rotates as you scroll. Scrolling becomes time
+       passing, which is the one metaphor a watch shop actually owns. Slow
+       enough to be felt rather than noticed. */
+    .dial-scroll {
+      animation-name: dial-turn;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0% 100%;
+    }
+
+    @keyframes dial-turn {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(42deg);
+      }
+    }
+
+    /* The dial also drifts up as the hero leaves, so it reads as parallax
+       depth rather than a sticker on the background. */
+    /* Driven off the ROOT scroller, not view(). The hero section sets
+       overflow:hidden to stop the oversized dial causing horizontal scroll,
+       which makes it a scrollport that never scrolls - and a view() timeline
+       whose scrollport cannot scroll stays inactive forever. */
+    .dial-parallax {
+      animation-name: dial-drift;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0% 60%;
+    }
+
+    @keyframes dial-drift {
+      from {
+        transform: translateY(4%);
+      }
+      to {
+        transform: translateY(-14%);
+      }
+    }
+  }
+}
+
+/* Tactile feedback. Cheap, universal, no scroll-timeline needed. */
+.press {
+  transition:
+    transform 200ms ease-out,
+    background-color 200ms ease-out,
+    border-color 200ms ease-out;
+}
+
+.press:active {
+  transform: scale(0.98);
+}
+
+/* Brand tiles lift on hover. Transform only, so it composites. */
+.lift {
+  transition:
+    transform 200ms ease-out,
+    border-color 200ms ease-out,
+    background-color 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press:active,
+  .lift:hover {
+    transform: none;
+  }
+}
+
+/* Hero copy enters on load. The hero is already in view, so a scroll timeline
+   would never fire - this is the one place a plain keyframe is correct.
+   Runs once, well under the WCAG 2.2.2 five-second threshold. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > * {
+    animation: hero-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero-copy > *:nth-child(1) { animation-delay: 60ms; }
+  .hero-copy > *:nth-child(2) { animation-delay: 180ms; }
+  .hero-copy > *:nth-child(3) { animation-delay: 300ms; }
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}

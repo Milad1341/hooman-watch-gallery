@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Owner's raw photos before processing. Keep out of git; they are large and
+# the processed derivatives in src/assets/watches/ are what the build uses.
+photos-raw/
+
+# Screenshots for sharing, not part of the site
+preview-for-hooman/
+.parked-build/

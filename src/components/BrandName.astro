@@ -1,0 +1,33 @@
+---
+/**
+ * A Latin brand name sitting inside Persian RTL text.
+ *
+ * Without bidi isolation the Unicode bidi algorithm reorders the surrounding
+ * run and mangles the line. `<bdi>` scopes the direction change so "ساعت SEIKO
+ * اصل" renders in the order a human wrote it.
+ *
+ * Use this EVERY time a Latin brand name appears in Persian copy. It is the
+ * kind of bug that looks fine to a developer who does not read Persian.
+ */
+interface Props {
+  /** Latin form, e.g. "SEIKO" */
+  name: string;
+  /** Optional Persian form, e.g. "سیکو" - shown when `fa` is true */
+  fa?: string;
+  /** Render the Persian form instead of the Latin one */
+  usePersian?: boolean;
+  class?: string;
+}
+
+const { name, fa, usePersian = false, class: className = '' } = Astro.props;
+const shown = usePersian && fa ? fa : name;
+const isLatin = !(usePersian && fa);
+---
+
+{
+  isLatin ? (
+    <bdi dir="ltr" class={className}>{shown}</bdi>
+  ) : (
+    <span class={className}>{shown}</span>
+  )
+}

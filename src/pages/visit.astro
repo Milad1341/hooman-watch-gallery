@@ -1,0 +1,97 @@
+---
+/**
+ * Visit.
+ *
+ * Ekbatan is a maze of phases and numbered bazaarchehs, so a map pin is not
+ * enough - written landmark directions matter more. The owner has not supplied
+ * his own wording yet, so that block is marked and left honest rather than
+ * invented.
+ */
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import CallBar from '../components/CallBar.astro';
+import Phone from '../components/Phone.astro';
+import { SHOP, primaryPhone } from '../data/shop.js';
+import { toPersianDigits } from '../lib/normalize.js';
+---
+
+<Base
+  title={`آدرس گالری ساعت هومن | شهرک اکباتان تهران`}
+  description="گالری ساعت هومن: تهران، شهرک اکباتان، فاز یک، بازارچه شماره ۱۰، پلاک ۳. هر روز هفته باز است."
+>
+  <SiteHeader />
+
+  <main class="mx-auto max-w-6xl px-6 py-14">
+    <h1 class="text-3xl">آدرس گالری</h1>
+
+    <div class="mt-10 grid gap-12 md:grid-cols-2">
+      <div>
+        <p><span class="label text-[11px] text-muted">نشانی</span></p>
+        <p class="mt-3 text-lg">{SHOP.address.fa}</p>
+
+        <p class="mt-8"><span class="label text-[11px] text-muted">ساعت کاری</span></p>
+        <p class="mt-3 text-lg">هر روز هفته</p>
+        {
+          SHOP.hours.map((h) => (
+            <p class="text-muted">
+              <span class="ltr-num">{toPersianDigits(h.opens)}</span> تا{' '}
+              <span class="ltr-num">{toPersianDigits(h.closes)}</span>
+            </p>
+          ))
+        }
+        <p class="mt-3 text-sm text-muted">بین ۱۴ تا ۱۷ مغازه بسته است.</p>
+
+        <p class="mt-8"><span class="label text-[11px] text-muted">پارکینگ</span></p>
+        <p class="mt-3 text-muted">پارکینگ در نزدیکی مغازه موجود است.</p>
+      </div>
+
+      <div>
+        <p><span class="label text-[11px] text-muted">تماس</span></p>
+        <ul class="mt-3 space-y-2">
+          {
+            SHOP.phones.map((p) => (
+              <li>
+                <Phone national={p.national} display={p.display} class="text-lg text-ink" />
+                <span class="ms-3 text-sm text-muted">{p.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="mt-8">
+          <Phone
+            national={primaryPhone.national}
+            display={primaryPhone.display}
+            label="تماس با گالری"
+            class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-on-accent"
+          />
+        </p>
+
+        <p class="mt-8"><span class="label text-[11px] text-muted">اینستاگرام</span></p>
+        <p class="mt-3">
+          <a
+            href={`https://www.instagram.com/${SHOP.instagram}/`}
+            rel="noopener"
+            class="text-muted hover:text-ink"
+          >
+            @{SHOP.instagram}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- TODO(owner): replace with Hemmati's own sentence for how he directs
+         people on the phone. His wording will beat anything written here. -->
+    <section class="mt-16 border-t border-hairline pt-10">
+      <h2 class="text-2xl">پیدا کردن مغازه</h2>
+      <p class="mt-4 max-w-[46rem] text-muted">
+        اگر اولین بار است که به بازارچه شماره ۱۰ می‌آیید، زنگ بزنید تا راهنمایی‌تان کنیم.
+        اکباتان بزرگ است و پیدا کردن پلاک از روی نقشه همیشه آسان نیست.
+      </p>
+    </section>
+  </main>
+
+  <SiteFooter />
+  <CallBar />
+</Base>

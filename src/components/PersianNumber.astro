@@ -1,0 +1,22 @@
+---
+/**
+ * Display a number in Persian digits ۰-۹.
+ *
+ * DISPLAY ONLY. Never use the output inside a `tel:` href - RFC 3966 requires
+ * ASCII digits and Persian-Indic digits will not dial. That is the single most
+ * common Iranian-specific bug on a site like this.
+ *
+ * Also isolates the run so bidi does not reverse it inside Persian text.
+ */
+import { toPersianDigits } from '../lib/normalize.js';
+
+interface Props {
+  value: string | number;
+  class?: string;
+}
+
+const { value, class: className = '' } = Astro.props;
+const persian = toPersianDigits(value);
+---
+
+<span class:list={['ltr-num', className]}>{persian}</span>

@@ -1,0 +1,34 @@
+---
+/**
+ * Sticky call bar, mobile only.
+ *
+ * NN/g on persistent bars: smallest height that still gives readable text and
+ * tappable targets, opaque high-contrast background, one primary action.
+ * 56-64px, in the thumb zone.
+ *
+ * Deliberately NOT a floating circular FAB - a FAB hides its label and on a
+ * watch catalogue it covers the product imagery.
+ */
+import Phone from './Phone.astro';
+import { primaryPhone } from '../data/shop.js';
+---
+
+<div class="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-shell md:hidden">
+  <div class="flex h-[60px] items-stretch">
+    <Phone
+      national={primaryPhone.national}
+      display={primaryPhone.display}
+      label="تماس"
+      class="flex flex-1 items-center justify-center gap-2 bg-accent text-on-accent"
+    />
+    <a
+      href="/watches/"
+      class="flex items-center justify-center px-6 text-ink"
+    >
+      مجموعه
+    </a>
+  </div>
+</div>
+
+<!-- Reserve the space so the bar never covers the last section. -->
+<div class="h-[60px] md:hidden" aria-hidden="true"></div>

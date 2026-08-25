@@ -1,0 +1,26 @@
+---
+/**
+ * The Hooman mark, inlined as SVG.
+ *
+ * Inlined rather than <img src> for three reasons: it inherits colour from
+ * `currentColor`, it costs no extra request (every request is ~70-97ms of
+ * international latency to this audience), and it renders in the first paint.
+ *
+ * Regenerate with: node scripts/build-logo.mjs
+ */
+import full from '../assets/brand/mark.svg?raw';
+import simpleMark from '../assets/brand/mark-simple.svg?raw';
+
+interface Props {
+  /** Quarters-only variant. Use below 24px, where the batons fill in. */
+  simple?: boolean;
+  class?: string;
+  style?: string;
+}
+
+const { simple = false, class: className = '', style } = Astro.props;
+const svg = (simple ? simpleMark : full)
+  .replace('<svg', `<svg class="${className}"${style ? ` style="${style}"` : ''}`);
+---
+
+<Fragment set:html={svg} />

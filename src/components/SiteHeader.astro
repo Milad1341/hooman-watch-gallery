@@ -1,0 +1,48 @@
+---
+/**
+ * Site header. The phone number is TEXT, not an icon.
+ *
+ * Validated at the premium end: A Collected Man, a high-end independent
+ * dealer, puts its number in the top header of every page. This is not a
+ * cheap-local-business tell, it is what dealers who sell by conversation do.
+ *
+ * Nav stays on one line at desktop and the bar stays under 80px.
+ */
+import Mark from './Mark.astro';
+import Phone from './Phone.astro';
+import { SHOP, primaryPhone } from '../data/shop.js';
+
+const nav = [
+  { href: '/watches/', label: 'مجموعه' },
+  { href: '/repairs/', label: 'تعمیرات' },
+  { href: '/about/', label: 'درباره ما' },
+  { href: '/visit/', label: 'آدرس' },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-hairline bg-shell/95 backdrop-blur">
+  <div class="mx-auto flex h-[68px] max-w-6xl items-center gap-6 px-6">
+    <a href="/" class="flex shrink-0 items-center gap-3" aria-label={SHOP.nameFa}>
+      <Mark class="w-8 text-ink" />
+      <span class="hidden text-base sm:inline">{SHOP.nameFa}</span>
+    </a>
+
+    <nav class="hidden flex-1 md:block">
+      <ul class="flex items-center gap-7">
+        {nav.map((n) => (
+          <li>
+            <a href={n.href} class="text-muted transition-colors duration-200 ease-out hover:text-ink">
+              {n.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <Phone
+      national={primaryPhone.national}
+      display={primaryPhone.display}
+      class="ms-auto text-accent md:ms-0"
+    />
+  </div>
+</header>

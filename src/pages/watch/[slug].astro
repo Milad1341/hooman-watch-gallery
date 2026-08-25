@@ -1,0 +1,185 @@
+---
+/**
+ * Product detail.
+ *
+ * The CTA carries the reference, so a call opens on a specific watch rather
+ * than a general enquiry. That is the validated Iranian flow - Torob pre-fills
+ * exactly this shape of message for physical shops.
+ */
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import CallBar from '../../components/CallBar.astro';
+import BrandName from '../../components/BrandName.astro';
+import Phone from '../../components/Phone.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import {
+  products, brandByKey, byBrand,
+  GENDERS, SHAPES, MOVEMENTS, STRAPS, CRYSTALS, MATERIALS,
+} from '../../lib/catalogue.js';
+import { SHOP, primaryPhone, whatsappHref } from '../../data/shop.js';
+import { toPersianDigits } from '../../lib/normalize.js';
+import { productImage } from '../../lib/images.js';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+
+const { p } = Astro.props;
+const brand = brandByKey[p.brand];
+const related = byBrand(p.brand).filter((x) => x.slug !== p.slug).slice(0, 4);
+const img = productImage(p.slug);
+
+const enquiry =
+  `سلام، از سایت گالری ساعت هومن تماس می‌گیرم.\n` +
+  `درباره‌ی ${brand.fa} ${p.model} با کد ${p.reference} سوال داشتم.\n` +
+  `موجوده؟ قیمتش چنده؟`;
+
+const specs = [
+  ['کد محصول', p.reference, true],
+  ['برند', brand.fa, false],
+  ['دسته', GENDERS[p.gender], false],
+  ['قطر قاب', p.caseSize ? `${toPersianDigits(p.caseSize)} میلی‌متر` : null, false],
+  ['فرم صفحه', SHAPES[p.caseShape], false],
+  ['موتور', MOVEMENTS[p.movement], false],
+  ['جنس قاب', MATERIALS[p.caseMaterial], false],
+  ['بند', STRAPS[p.strap], false],
+  ['شیشه', CRYSTALS[p.crystal], false],
+  ['ضدآب', p.waterResistance ? `${toPersianDigits(p.waterResistance)} متر` : null, false],
+].filter(([, v]) => v);
+
+// Product JSON-LD. NOTE: no `price`. Google's Product rich result requires one,
+// so this cannot earn a rich result - that is accepted, not an oversight. See
+// docs/phases/PHASE-06-trust-and-seo.md.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  '@id': new URL(`/watch/${p.slug}/`, Astro.site).href + '#product',
+  name: `ساعت ${brand.fa} مدل ${p.reference}`,
+  sku: p.reference,
+  mpn: p.reference,
+  brand: { '@type': 'Brand', name: brand.latin },
+  offers: {
+    '@type': 'Offer',
+    availability: 'https://schema.org/InStoreOnly',
+    seller: { '@id': new URL('/', Astro.site).href + '#store' },
+  },
+};
+---
+
+<Base
+  title={`${brand.fa} ${p.model} ${p.reference} | ${SHOP.nameFa}`}
+  description={`ساعت ${brand.fa} مدل ${p.reference} در گالری ساعت هومن، شهرک اکباتان. برای قیمت و موجودی تماس بگیرید.`}
+>
+  <SiteHeader />
+
+  <main class="mx-auto max-w-6xl px-6 py-10">
+    <nav aria-label="مسیر" class="text-sm text-muted">
+      <a href="/" class="inline-block px-1 py-1 hover:text-ink">خانه</a>
+      <span class="mx-1">/</span>
+      <a href="/watches/" class="inline-block px-1 py-1 hover:text-ink">مجموعه</a>
+      <span class="mx-1">/</span>
+      <a href={`/brand/${brand.key}/`} class="inline-block px-1 py-1 hover:text-ink">{brand.fa}</a>
+    </nav>
+
+    <div class="mt-8 grid gap-10 lg:grid-cols-2">
+      <!-- The lit plate -->
+      <div class="bg-plate p-6">
+        <div class="flex aspect-square items-center justify-center overflow-hidden bg-[#eeeeeb]">
+          {
+            img ? (
+              <Picture
+                src={img}
+                alt={`ساعت ${brand.fa} مدل ${p.reference}`}
+                widths={[480, 720, 960]}
+                sizes="(max-width: 1024px) 92vw, 560px"
+                formats={['avif', 'webp']}
+                loading="eager"
+                fetchpriority="high"
+                class="h-full w-full object-cover"
+              />
+            ) : (
+              <span class="label text-[11px] text-plate-muted">NO PHOTO YET</span>
+            )
+          }
+        </div>
+      </div>
+
+      <div>
+        <p><span class="label text-[11px] text-muted"><BrandName name={brand.latin} /></span></p>
+        <h1 class="mt-2 text-3xl">{p.model}</h1>
+        <p class="mt-2"><span class="reference text-muted">{p.reference}</span></p>
+
+        {
+          brand.certified && (
+            <p class="mt-5 inline-flex items-center gap-2 border border-accent px-3 py-2 text-sm text-accent">
+              <span class="inline-block h-3 w-1 bg-accent" />
+              نمایندگی رسمی {brand.fa}
+            </p>
+          )
+        }
+
+        <div class="mt-8 border-t border-hairline pt-6">
+          <p class="text-lg">تماس بگیرید</p>
+          <p class="mt-2 text-sm text-muted">
+            قیمت‌ها روی سایت نیست. زنگ بزنید تا قیمت و موجودی امروز را بگوییم.
+          </p>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Phone
+            national={primaryPhone.national}
+            display={primaryPhone.display}
+            label="تماس با گالری"
+            class="press inline-flex min-h-[54px] items-center gap-3 bg-accent px-7 text-on-accent"
+          />
+          <a
+            href={whatsappHref(SHOP.whatsapp, enquiry)}
+            rel="noopener"
+            class="press inline-flex min-h-[54px] items-center border border-control px-7 text-ink hover:bg-panel"
+          >
+            پرسیدن در واتساپ
+          </a>
+        </div>
+
+        <p class="mt-4 text-xs text-muted">
+          پیام واتساپ با کد <span class="reference">{p.reference}</span> از قبل نوشته شده است.
+        </p>
+
+        <!-- Specs in mono. A spec table set in mono reads like a technical
+             document, which is the register a watch buyer trusts. -->
+        <dl class="mt-10 grid grid-cols-2 gap-x-6 gap-y-4">
+          {
+            specs.map(([k, v, mono]) => (
+              <div>
+                <dt class="text-xs text-muted">{k}</dt>
+                <dd class={mono ? 'reference mt-1 text-sm' : 'mt-1 text-sm'}>{v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+
+    {
+      related.length > 0 && (
+        <section class="mt-20">
+          <h2 class="text-xl">مدل‌های دیگر {brand.fa}</h2>
+          <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {related.map((r) => (
+              <li>
+                <ProductCard product={r} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </main>
+
+  <SiteFooter />
+  <CallBar />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Base>
